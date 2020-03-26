@@ -31,13 +31,13 @@ namespace Com.Danliris.Service.Finance.Accounting.WebApi.Controllers.v1.CreditBa
         }
 
         [HttpGet("reports")]
-        public IActionResult GetReport([FromQuery] bool isImport, [FromQuery]int month, [FromQuery]int year, [FromQuery] string supplierName = null, int page = 1, int size = 25)
+        public IActionResult GetReport([FromQuery] bool isImport, [FromQuery]int month, [FromQuery]int year, [FromQuery] string supplierName = null, int page = 1, int size = 25, bool isForeignCurrency = false)
         {
             try
             {
                 int offSet = Convert.ToInt32(Request.Headers["x-timezone-offset"]);
                 //int offSet = 7;
-                var data = Service.GetReport(isImport,page, size, supplierName, month, year, offSet);
+                var data = Service.GetReport(isImport,page, size, supplierName, month, year, offSet, isForeignCurrency);
 
                 return Ok(new
                 {
@@ -63,13 +63,13 @@ namespace Com.Danliris.Service.Finance.Accounting.WebApi.Controllers.v1.CreditBa
         }
 
         [HttpGet("reports/downloads/xls")]
-        public IActionResult GetXls([FromQuery] bool isImport, [FromQuery]int month, [FromQuery]int year, [FromQuery]string supplierName = null)
+        public IActionResult GetXls([FromQuery] bool isImport, [FromQuery]int month, [FromQuery]int year, [FromQuery]string supplierName = null, bool isForeignCurrency = false)
         {
             try
             {
                 byte[] xlsInBytes;
                 int offSet = Convert.ToInt32(Request.Headers["x-timezone-offset"]);
-                var xls = Service.GenerateExcel(isImport, supplierName, month, year, offSet);
+                var xls = Service.GenerateExcel(isImport, supplierName, month, year, offSet, isForeignCurrency);
 
                 string fileName = "";
 

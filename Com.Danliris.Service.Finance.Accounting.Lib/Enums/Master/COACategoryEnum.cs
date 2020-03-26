@@ -75,6 +75,14 @@ namespace Com.Danliris.Service.Finance.Accounting.Lib.Enums.Master
         RETUR_PENJUALAN = 51,
         [Description("POTONGAN PENJUALAN")]
         POTONGAN_PENJUALAN = 52,
+        [Description("BAHAN BAKU")]
+        BAHAN_BAKU = 53,
+        [Description("UPAH LANGSUNG")]
+        UPAH_LANGSUNG = 54,
+        [Description("BEBAN PRODUKSI TIDAK LANGSUNG")]
+        BEBAN_PRODUKSI_TIDAK_LANGSUNG = 55,
+        [Description("BEBAN PABRIKASI STANDAR")]
+        BEBAN_PRABIKASI_STANDAR = 56,
         [Description("BEBAN POKOK PENJUALAN")]
         BEBAN_POKOK_PENJUALAN = 59,
 
