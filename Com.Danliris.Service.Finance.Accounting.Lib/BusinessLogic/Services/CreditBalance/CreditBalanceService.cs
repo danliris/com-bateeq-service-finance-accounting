@@ -31,7 +31,7 @@ namespace Com.Danliris.Service.Finance.Accounting.Lib.BusinessLogic.Services.Cre
             IdentityService = serviceProvider.GetService<IIdentityService>();
         }
 
-        public List<CreditBalanceViewModel> GetReport(bool isImport, string suplierName, int month, int year, int offSet)
+        public List<CreditBalanceViewModel> GetReport(bool isImport, string suplierName, int month, int year, int offSet, bool isForeignCurrency)
         {
             IQueryable<CreditorAccountModel> query = DbContext.CreditorAccounts.Where(x => x.SupplierIsImport == isImport).AsQueryable();
             List<CreditBalanceViewModel> result = new List<CreditBalanceViewModel>();
@@ -43,6 +43,9 @@ namespace Com.Danliris.Service.Finance.Accounting.Lib.BusinessLogic.Services.Cre
                 previousMonth = 12;
                 previousYear = year - 1;
             }
+
+            if (isForeignCurrency)
+                query = query.Where(entity => entity.CurrencyCode != "IDR");
 
             query = query.Where(x => x.UnitReceiptNoteDate.HasValue && x.UnitReceiptNoteDate.Value.Month == month && x.UnitReceiptNoteDate.Value.Year == year);
             if (!string.IsNullOrEmpty(suplierName))
@@ -75,9 +78,9 @@ namespace Com.Danliris.Service.Finance.Accounting.Lib.BusinessLogic.Services.Cre
             return result.OrderBy(x => x.Currency).ThenBy(x => x.Products).ThenBy(x => x.SupplierName).ToList();
         }
 
-        public MemoryStream GenerateExcel(bool isImport, string suplierName, int month, int year, int offSet)
+        public MemoryStream GenerateExcel(bool isImport, string suplierName, int month, int year, int offSet, bool isForeignCurrency)
         {
-            var data = GetReport(isImport, suplierName, month, year, offSet);
+            var data = GetReport(isImport, suplierName, month, year, offSet, isForeignCurrency);
 
             DataTable dt = new DataTable();
 
@@ -145,9 +148,9 @@ namespace Com.Danliris.Service.Finance.Accounting.Lib.BusinessLogic.Services.Cre
             return CreateExcel(isImport, month, year, new List<KeyValuePair<DataTable, string>>() { new KeyValuePair<DataTable, string>(dt, "Saldo Hutang Lokal") }, true);
         }
 
-        public ReadResponse<CreditBalanceViewModel> GetReport(bool isImport, int page, int size, string suplierName, int month, int year, int offSet)
+        public ReadResponse<CreditBalanceViewModel> GetReport(bool isImport, int page, int size, string suplierName, int month, int year, int offSet, bool isForeignCurrency)
         {
-            var queries = GetReport(isImport, suplierName, month, year, offSet);
+            var queries = GetReport(isImport, suplierName, month, year, offSet, isForeignCurrency);
 
             Pageable<CreditBalanceViewModel> pageable = new Pageable<CreditBalanceViewModel>(queries, page - 1, size);
             List<CreditBalanceViewModel> data = pageable.Data.ToList();
