@@ -8,6 +8,7 @@ using Com.Moonlay.Models;
 using Com.Moonlay.NetCore.Lib;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -485,14 +486,27 @@ namespace Com.Danliris.Service.Finance.Accounting.Lib.BusinessLogic.Services.Cre
                 foreach (var item in viewModel.CreditorAccounts)
                 {
                     var creditorAccount = await DbContext.CreditorAccounts.FirstOrDefaultAsync(x => x.SupplierCode == item.SupplierCode && x.UnitReceiptNoteNo == item.Code);
-                    creditorAccount.InvoiceNo = viewModel.InvoiceNo;
-                    creditorAccount.MemoNo = viewModel.MemoNo;
-                    creditorAccount.MemoDate = viewModel.MemoDate;
-                    creditorAccount.MemoDPP = item.MemoDPP;
-                    //creditorAccount.MemoDPPCurrency = item.MemoDPPCurrency;
-                    creditorAccount.MemoMutation = item.MemoMutation;
-                    creditorAccount.MemoPPN = item.MemoPPN;
-                    //creditorAccount.PaymentDuration = viewModel.PaymentDuration;
+                    
+                    if (creditorAccount != null)
+                    {
+                        creditorAccount.InvoiceNo = viewModel.InvoiceNo;
+                        creditorAccount.MemoNo = viewModel.MemoNo;
+                        creditorAccount.MemoDate = viewModel.MemoDate;
+                        creditorAccount.MemoDPP = item.MemoDPP;
+                        //creditorAccount.MemoDPPCurrency = item.MemoDPPCurrency;
+                        creditorAccount.MemoMutation = item.MemoMutation;
+                        creditorAccount.MemoPPN = item.MemoPPN;
+                        //creditorAccount.PaymentDuration = viewModel.PaymentDuration;
+                    }
+
+                    //creditorAccount.InvoiceNo = viewModel.InvoiceNo;
+                    //creditorAccount.MemoNo = viewModel.MemoNo;
+                    //creditorAccount.MemoDate = viewModel.MemoDate;
+                    //creditorAccount.MemoDPP = item.MemoDPP;
+                    ////creditorAccount.MemoDPPCurrency = item.MemoDPPCurrency;
+                    //creditorAccount.MemoMutation = item.MemoMutation;
+                    //creditorAccount.MemoPPN = item.MemoPPN;
+                    ////creditorAccount.PaymentDuration = viewModel.PaymentDuration;
                 }
                 return await DbContext.SaveChangesAsync();
             }
@@ -502,6 +516,30 @@ namespace Com.Danliris.Service.Finance.Accounting.Lib.BusinessLogic.Services.Cre
             }
 
         }
+
+        //private async Task<CreditorAccountUnitReceiptNotePostedViewModel> GetCreditorAccountFromUnitReceiptNote(string urnNo)
+        //{
+        //    var jsonSerializerSettings = new JsonSerializerSettings
+        //    {
+        //        MissingMemberHandling = MissingMemberHandling.Ignore
+        //    };
+
+        //    //var token = GetTokenAsync().Result;
+
+        //    var categoryUri = APIEndpoint.Purchasing + $"unit-receipt-notes/by-user/correction-note/";
+        //    var categoryResponse = _http.GetAsync(categoryUri, token).Result;
+
+        //    var categoryResult = new BaseResponse<List<CategoryCOAResult>>()
+        //    {
+        //        data = new List<CategoryCOAResult>()
+        //    };
+        //    if (categoryResponse.IsSuccessStatusCode)
+        //    {
+        //        categoryResult = JsonConvert.DeserializeObject<BaseResponse<List<CategoryCOAResult>>>(categoryResponse.Content.ReadAsStringAsync().Result, jsonSerializerSettings);
+        //    }
+
+        //    _cacheManager.Set(MemoryCacheConstant.Categories, categoryResult.data);
+        //}
 
         public async Task<int> CreateFromMemoAsync(CreditorAccountMemoPostedViewModel viewModel)
         {

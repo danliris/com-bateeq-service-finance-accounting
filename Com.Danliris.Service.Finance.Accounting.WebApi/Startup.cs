@@ -86,7 +86,8 @@ namespace Com.Danliris.Service.Finance.Accounting.WebApi
                 .AddTransient<IPaymentDispositionNoteService, PaymentDispositionNoteService>()
                 .AddTransient<IPaymentDispositionNotVerifiedReport, PaymentDispositionNotVerifiedReportService>()
                 .AddTransient<IOthersExpenditureProofDocumentService, OthersExpenditureProofDocumentService>()
-                .AddTransient<IAutoJournalService, AutoJournalService>();
+                .AddTransient<IAutoJournalService, AutoJournalService>()
+                .AddTransient<IAutoDailyBankTransactionService, AutoDailyBankTransactionService>();
         }
 
 

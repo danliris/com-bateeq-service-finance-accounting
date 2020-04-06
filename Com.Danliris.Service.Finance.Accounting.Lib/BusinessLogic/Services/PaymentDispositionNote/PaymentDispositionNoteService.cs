@@ -80,7 +80,7 @@ namespace Com.Danliris.Service.Finance.Accounting.Lib.BusinessLogic.Services.Pay
             }
             else
             {
-                int lastNoNumber = Int32.Parse(lastNo.PaymentDispositionNo.Replace(no, "")) + 1;
+                int lastNoNumber = int.Parse(lastNo.PaymentDispositionNo.Replace(no, "")) + 1;
                 return no + lastNoNumber.ToString().PadLeft(Padding, '0');
             }
         }
